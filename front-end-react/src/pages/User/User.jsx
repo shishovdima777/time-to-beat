@@ -5,13 +5,12 @@ const User = () => {
         username: 'Alan Wake',
     };
 
-    // State to manage the active section (Profile, Games, Reviews)
     const [activeSection, setActiveSection] = useState('Profile');
 
     return  (
         <div className="container mx-auto mt-8 p-8 bg-white rounded-md shadow-md flex flex-wrap">
             {/* Left side with Avatar and Username */}
-            <div className="w-1/3 pr-8">
+            <div className="pr-8">
                 {/* User Avatar */}
                 <img
                     src={userData.avatarUrl}
@@ -24,7 +23,7 @@ const User = () => {
             </div>
 
             {/* Right side with Header, Navigation Bar, Time Display Bar, and Game Description */}
-            <div className="flex-2">
+            <div className="flex-1">
                 {/* Header */}
                 <h2 className="text-2xl font-bold mb-4">Profile Information</h2>
 
@@ -57,8 +56,7 @@ const User = () => {
                     {activeSection === 'Profile' && (
                         <div>
                             {/* Add user profile information here */}
-                            <p className="text-gray-800 mb-2">Email: john.doe@example.com</p>
-                            <p className="text-gray-800 mb-2">Location: City, Country</p>
+                            <p className="text-gray-800 mb-2">About me: </p>
                             {/* Add more information as needed */}
                         </div>
                     )}
