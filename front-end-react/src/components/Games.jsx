@@ -7,7 +7,7 @@ const Games = ({games}) => {
                     <li key={game.gameName} className="bg-white p-8 rounded-md shadow-md w-150 min-w-[450px] max-w-[450px] mx-auto mb-8">
                         <div className="flex">
                             {/* Game Image on the left */}
-                            <div className="w-40 h-40 bg-gray-300 rounded-md mr-6"></div>
+                            <img className="rounded-md mr-6" src="//images.igdb.com/igdb/image/upload/t_logo_med/co5293.jpg"/>
                             <div>
                                 <h3 className="text-2xl font-semibold mb-4">{game.gameName}</h3>
                                 <div className="text-gray-700">

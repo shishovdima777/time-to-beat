@@ -26,13 +26,16 @@ public class GameController {
 
     @GetMapping()
     public List<GameDTO> getAllGames() {
-        return gameService.findAll().stream().map(this::convertToGameDto).toList();
+        List<GameDTO> gameDTOList = gameService.findAll().stream().map(this::convertToGameDto).toList(); // TODO
+        return gameDTOList;
     }
     @GetMapping("game/{id}")
     public GameDTO getGame(@PathVariable int id) {
         return convertToGameDto(gameService.getGame(id));
     }
     private GameDTO convertToGameDto(Game game) {
+
+
        return modelMapper.map(game, GameDTO.class);
     }
 }

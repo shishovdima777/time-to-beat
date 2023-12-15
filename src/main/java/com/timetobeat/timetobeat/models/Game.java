@@ -12,6 +12,8 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_id")
     private int gameId;
+    @Column(name = "igdb_id")
+    private int igdbId;
     @Column(name = "game_name")
     private String gameName;
     @Column(name = "avg_main_story_hours")
@@ -31,6 +33,14 @@ public class Game {
 
     public Game() {
 
+    }
+
+    public int getIgdbId() {
+        return igdbId;
+    }
+
+    public void setIgdbId(int igdbId) {
+        this.igdbId = igdbId;
     }
 
     public Game(String gameName) {
