@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 
 public class GameDTO {
     private String gameName;
-    private String coverLink;
+    private String url;
     private Integer avgMainStoryHours;
 
     private Integer avgMainStoryMinutes;
@@ -17,12 +17,12 @@ public class GameDTO {
 
     private Integer avgMainPlusDlcMinutes;
 
-    public String getCoverLink() {
-        return coverLink;
+    public String getUrl() {
+        return url;
     }
 
-    public void setCoverLink(String coverLink) {
-        this.coverLink = coverLink;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getGameName() {

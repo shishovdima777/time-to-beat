@@ -7,7 +7,7 @@ const Games = ({games}) => {
                     <li key={game.gameName} className="bg-white p-8 rounded-md shadow-md w-150 min-w-[450px] max-w-[450px] mx-auto mb-8">
                         <div className="flex">
                             {/* Game Image on the left */}
-                            <img className="rounded-md mr-6" src="//images.igdb.com/igdb/image/upload/t_logo_med/co5293.jpg"/>
+                            <img className="rounded-md mr-6" src={game.url.replace(`thumb`, `logo_med`)}/>
                             <div>
                                 <h3 className="text-2xl font-semibold mb-4">{game.gameName}</h3>
                                 <div className="text-gray-700">
