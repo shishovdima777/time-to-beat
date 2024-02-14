@@ -1,8 +1,7 @@
 package com.timetobeat.timetobeat.dto;
 
-import jakarta.persistence.Column;
-
 public class GameDTO {
+    private int igdbId;
     private String gameName;
     private String url;
     private Integer avgMainStoryHours;
@@ -16,6 +15,14 @@ public class GameDTO {
     private Integer avgMainPlusDlcHours;
 
     private Integer avgMainPlusDlcMinutes;
+
+    public int getIgdbId() {
+        return igdbId;
+    }
+
+    public void setIgdbId(int igdbId) {
+        this.igdbId = igdbId;
+    }
 
     public String getUrl() {
         return url;

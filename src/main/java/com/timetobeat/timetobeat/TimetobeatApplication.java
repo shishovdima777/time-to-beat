@@ -4,6 +4,8 @@ import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -28,24 +30,25 @@ public class TimetobeatApplication {
 	}
 
 	private static final String BASE_URL = "https://api.igdb.com/v4/";
+	@Value("${client_id}")
+	private String clientId;
+	@Value("${access_token}")
+	private String accessToken;
 	@Bean
 	public WebClient webClientWithTimeout() {
-
 		HttpClient httpClient = HttpClient.create()
 				.responseTimeout(Duration.ofSeconds(2))
 				.doOnConnected(conn -> conn
 						.addHandlerLast(new ReadTimeoutHandler(10))
 						.addHandlerLast(new WriteTimeoutHandler(10)));
 
-
 		return WebClient.builder()
 				.baseUrl(BASE_URL)
 				.defaultHeaders(httpHeaders -> {
-					httpHeaders.set("Client-ID", "f4ps5a4fbpf1jcxjphi555jn1q4xci");
-					httpHeaders.set("Authorization", "Bearer g1dcbty64xivi1jitmnb15kmlxslwv");
+					httpHeaders.set("Client-ID", clientId);
+					httpHeaders.set("Authorization", "Bearer " + accessToken);
 				})
 				.clientConnector(new ReactorClientHttpConnector(httpClient))
 				.build();
 	}
-
 }

@@ -7,9 +7,10 @@ import com.timetobeat.timetobeat.services.GameService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -24,18 +25,18 @@ public class GameController {
         this.gameService = gameService;
         this.modelMapper = modelMapper;
     }
-
     @GetMapping()
-    public List<GameDTO> getAllGames() {
-        return gameService.findAll().stream().map(this::convertToGameDto).toList();
-
+    public Mono<List<GameDTO>> getAllGames() {
+        List<Game> gameList = gameService.findAll();
+        String igdbIds = gameService.getIgdbIds(gameList);
+        List<GameDTO> gameDTOList = gameList.stream().map(this::convertToGameDto).sorted(Comparator.comparingInt(GameDTO::getIgdbId)).toList();
+        return gameService.setImage(gameDTOList, igdbIds);
     }
     @GetMapping("game/{id}")
     public GameDTO getGame(@PathVariable int id) {
         return convertToGameDto(gameService.getGame(id));
     }
     private GameDTO convertToGameDto(Game game) {
-        GameDTO gameDTO = modelMapper.map(game, GameDTO.class);
-        return gameService.setImageUrl(game, gameDTO);
+        return modelMapper.map(game, GameDTO.class);
     }
 }
