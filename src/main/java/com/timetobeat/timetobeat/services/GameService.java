@@ -1,5 +1,6 @@
 package com.timetobeat.timetobeat.services;
 import com.timetobeat.timetobeat.dto.GameDTO;
+import com.timetobeat.timetobeat.dto.GameFullDTO;
 import com.timetobeat.timetobeat.dto.GameImageDTO;
 import com.timetobeat.timetobeat.models.Game;
 import com.timetobeat.timetobeat.repositories.GamesRepository;
@@ -88,23 +89,19 @@ public class GameService {
             }
         });
     }
+    public Mono<GameFullDTO> getGame(GameDTO gameDTO) {
+        String bodyValue = "f name, summary, cover.url, platforms.name, genres.name;\n" +
+                "w id = " + gameDTO.getIgdbId() + ";";
 
-    public Mono<GameDTO> setImageUrl(GameDTO gameDTO) {
-        String bodyValue = "f url, game;\n" +
-                "w game = " + gameDTO.getIgdbId() + ";";
-
-        Mono<List<GameImageDTO>> gameImageDTOMono = webClient
+        Mono<List<GameFullDTO>> fullGame = webClient
                 .post()
-                .uri("covers/").accept(MediaType.APPLICATION_JSON)
+                .uri("games/")
                 .bodyValue(bodyValue)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<GameImageDTO>>() {});
+                .bodyToMono(new ParameterizedTypeReference<List<GameFullDTO>>() {
+                });
 
-        return gameImageDTOMono.map(gameImageDTOS -> {
-            if(!gameImageDTOS.isEmpty()) {
-                gameDTO.setUrl(gameImageDTOS.get(0).getUrl());
-            }
-            return gameDTO;
-        });
+        return fullGame.map(gameFullDTOS -> gameFullDTOS.get(0));
+
     }
 }

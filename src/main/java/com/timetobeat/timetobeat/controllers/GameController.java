@@ -2,6 +2,7 @@ package com.timetobeat.timetobeat.controllers;
 
 
 import com.timetobeat.timetobeat.dto.GameDTO;
+import com.timetobeat.timetobeat.dto.GameFullDTO;
 import com.timetobeat.timetobeat.models.Game;
 import com.timetobeat.timetobeat.services.GameService;
 import org.modelmapper.ModelMapper;
@@ -33,9 +34,9 @@ public class GameController {
         return gameService.setImage(gameDTOList, igdbIds);
     }
     @GetMapping("game/{id}")
-    public Mono<GameDTO> getGame(@PathVariable int id) {
+    public Mono<GameFullDTO> getGame(@PathVariable int id) {
         GameDTO gameDTO = convertToGameDto(gameService.getGame(id));
-        return gameService.setImageUrl(gameDTO);
+        return gameService.getGame(gameDTO);
     }
     private GameDTO convertToGameDto(Game game) {
         return modelMapper.map(game, GameDTO.class);
