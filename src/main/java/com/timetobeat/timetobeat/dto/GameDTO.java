@@ -1,23 +1,27 @@
 package com.timetobeat.timetobeat.dto;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class GameDTO {
     private int igdbId;
     private String gameName;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String url;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String description;
     private Integer avgMainStoryHours;
-
     private Integer avgMainStoryMinutes;
-
     private Integer avgCompletionistHours;
-
     private Integer avgCompletionistMinutes;
-
     private Integer avgMainPlusDlcHours;
-
     private Integer avgMainPlusDlcMinutes;
-
     public int getIgdbId() {
         return igdbId;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setIgdbId(int igdbId) {

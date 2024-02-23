@@ -21,14 +21,12 @@ public class GameServiceTest {
     @Mock
     private GamesRepository gamesRepository;
     @Mock
-    private ModelMapper modelMapper;
-    @Mock
     private WebClient webClient;
     private List<Game> games;
     private GameService gameService;
     @BeforeEach
     public void initService() {
-        gameService = new GameService(gamesRepository, webClient, modelMapper);
+        gameService = new GameService(gamesRepository, webClient);
     }
     @BeforeEach
     public void prepareTestData() {

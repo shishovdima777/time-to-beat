@@ -33,8 +33,9 @@ public class GameController {
         return gameService.setImage(gameDTOList, igdbIds);
     }
     @GetMapping("game/{id}")
-    public GameDTO getGame(@PathVariable int id) {
-        return convertToGameDto(gameService.getGame(id));
+    public Mono<GameDTO> getGame(@PathVariable int id) {
+        GameDTO gameDTO = convertToGameDto(gameService.getGame(id));
+        return gameService.setImageUrl(gameDTO);
     }
     private GameDTO convertToGameDto(Game game) {
         return modelMapper.map(game, GameDTO.class);

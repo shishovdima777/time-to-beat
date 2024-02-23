@@ -20,12 +20,10 @@ import java.util.List;
 public class GameService {
     private final GamesRepository gamesRepository;
     private final WebClient webClient;
-    private final ModelMapper modelMapper;
     @Autowired
-    public GameService(GamesRepository gamesRepository, WebClient webClient, ModelMapper modelMapper) {
+    public GameService(GamesRepository gamesRepository, WebClient webClient) {
         this.gamesRepository = gamesRepository;
         this.webClient = webClient;
-        this.modelMapper = modelMapper;
     }
 
     public List<Game> findAll() {
@@ -65,11 +63,13 @@ public class GameService {
         return list1;
     }
     public Mono<List<GameImageDTO>> getGamesImages(String igdbIds) {
-      return webClient
+        String bodyValue = "f url, game;\n" +
+                "w game = (" + igdbIds + ");";
+
+        return webClient
                 .post()
                 .uri("covers/").accept(MediaType.APPLICATION_JSON)
-                .bodyValue("f url, game;\n" +
-                        "w game = (" + igdbIds + ");")
+                .bodyValue(bodyValue)
                 .retrieve()
               .bodyToMono(new ParameterizedTypeReference<List<GameImageDTO>>() {});
     }
@@ -86,6 +86,25 @@ public class GameService {
             } catch (IgdbIdException e) {
                 return Mono.error(e);
             }
+        });
+    }
+
+    public Mono<GameDTO> setImageUrl(GameDTO gameDTO) {
+        String bodyValue = "f url, game;\n" +
+                "w game = " + gameDTO.getIgdbId() + ";";
+
+        Mono<List<GameImageDTO>> gameImageDTOMono = webClient
+                .post()
+                .uri("covers/").accept(MediaType.APPLICATION_JSON)
+                .bodyValue(bodyValue)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<GameImageDTO>>() {});
+
+        return gameImageDTOMono.map(gameImageDTOS -> {
+            if(!gameImageDTOS.isEmpty()) {
+                gameDTO.setUrl(gameImageDTOS.get(0).getUrl());
+            }
+            return gameDTO;
         });
     }
 }
