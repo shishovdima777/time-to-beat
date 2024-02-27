@@ -12,7 +12,6 @@ public class GameFullDTO {
 
     public GameFullDTO() {
     }
-
     public GameFullDTO(int id, CoverDTO cover, List<GenreDTO> genres, String name, List<PlatformDTO> platforms, String summary) {
         this.id = id;
         this.cover = cover;

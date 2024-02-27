@@ -2,6 +2,7 @@ package com.timetobeat.timetobeat.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class GameDTO {
+    private int gameId;
     private int igdbId;
     private String gameName;
     private String url;
@@ -11,6 +12,15 @@ public class GameDTO {
     private Integer avgCompletionistMinutes;
     private Integer avgMainPlusDlcHours;
     private Integer avgMainPlusDlcMinutes;
+
+    public int getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
+
     public int getIgdbId() {
         return igdbId;
     }

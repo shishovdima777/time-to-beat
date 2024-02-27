@@ -5,6 +5,7 @@ import com.timetobeat.timetobeat.dto.GameImageDTO;
 import com.timetobeat.timetobeat.models.Game;
 import com.timetobeat.timetobeat.repositories.GamesRepository;
 import com.timetobeat.timetobeat.exception.IgdbIdException;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -21,6 +24,7 @@ import java.util.List;
 public class GameService {
     private final GamesRepository gamesRepository;
     private final WebClient webClient;
+
     @Autowired
     public GameService(GamesRepository gamesRepository, WebClient webClient) {
         this.gamesRepository = gamesRepository;
@@ -34,6 +38,52 @@ public class GameService {
     public Game getGame(int id) {
         return gamesRepository.getGameByGameId(id);
     }
+    @Transactional
+    public void updateTime(Game game, GameDTO gameDTO) {
+        updateMainStoryTime(game, avgTime(game.getAvgMainStoryHours(), game.getAvgMainStoryMinutes(),
+                gameDTO.getAvgMainStoryHours(), gameDTO.getAvgMainStoryMinutes()));
+
+        updateMainStoryExtraTime(game, avgTime(game.getAvgMainPlusDlcHours(), game.getAvgMainPlusDlcMinutes(),
+                gameDTO.getAvgMainPlusDlcHours(), gameDTO.getAvgMainPlusDlcMinutes()));
+
+        updateCompletionistTime(game, avgTime(game.getAvgCompletionistHours(), game.getAvgCompletionistMinutes(),
+                gameDTO.getAvgCompletionistHours(), gameDTO.getAvgCompletionistMinutes()));
+    }
+
+    public void updateMainStoryTime(Game game, List<Integer> time) {
+        game.setAvgMainStoryHours(time.get(0));
+        game.setAvgMainStoryMinutes(time.get(1));
+    }
+
+    public void updateMainStoryExtraTime(Game game, List<Integer> time) {
+        game.setAvgMainPlusDlcHours(time.get(0));
+        game.setAvgMainPlusDlcMinutes(time.get(1));
+    }
+
+    public void updateCompletionistTime(Game game, List<Integer> time) {
+        game.setAvgCompletionistHours(time.get(0));
+        game.setAvgCompletionistMinutes(time.get(1));
+    }
+    public List<Integer> avgTime(int currentAvgHours, int currentAvgMinutes,
+                        int inputHours, int inputMinutes) {
+
+        List<Integer> result = new ArrayList<>(2);
+
+        int currentTotalMinutes = currentAvgHours * 60 + currentAvgMinutes;
+        int newTotalMinutes = inputHours * 60 + inputMinutes;
+
+        int updatedTotalMinutes = currentTotalMinutes + newTotalMinutes;
+        int updatedAvgMinutes = updatedTotalMinutes / 2;
+
+        int updatedAvgHours = updatedAvgMinutes / 60;
+        int remainingMinutes = updatedAvgMinutes % 60;
+
+        result.add(updatedAvgHours);
+        result.add(remainingMinutes);
+
+        return result;
+    }
+
     public String getIgdbIds(List<Game> games) {
         StringBuilder igdbIds = new StringBuilder();
         for(int i = 0; i < games.size(); i++) {

@@ -38,6 +38,11 @@ public class GameController {
         GameDTO gameDTO = convertToGameDto(gameService.getGame(id));
         return gameService.getGame(gameDTO);
     }
+    @PatchMapping ("game/{id}")
+    public String updateTime(@PathVariable("id") int id, @RequestBody GameDTO gameDTO){
+        gameService.updateTime(gameService.getGame(id), gameDTO);
+        return "redirect:/game/{id}";
+    }
     private GameDTO convertToGameDto(Game game) {
         return modelMapper.map(game, GameDTO.class);
     }
