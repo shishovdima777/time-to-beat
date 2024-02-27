@@ -2,8 +2,8 @@ package com.timetobeat.timetobeat.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class GameDTO {
-    private int gameId;
-    private int igdbId;
+    private Integer gameId;
+    private Integer igdbId;
     private String gameName;
     private String url;
     private Integer avgMainStoryHours;
@@ -13,18 +13,18 @@ public class GameDTO {
     private Integer avgMainPlusDlcHours;
     private Integer avgMainPlusDlcMinutes;
 
-    public int getGameId() {
+    public Integer getGameId() {
         return gameId;
     }
 
-    public void setGameId(int gameId) {
+    public void setGameId(Integer gameId) {
         this.gameId = gameId;
     }
 
-    public int getIgdbId() {
+    public Integer getIgdbId() {
         return igdbId;
     }
-    public void setIgdbId(int igdbId) {
+    public void setIgdbId(Integer igdbId) {
         this.igdbId = igdbId;
     }
 

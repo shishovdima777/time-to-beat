@@ -1,22 +1,22 @@
 package com.timetobeat.timetobeat.dto;
 
 public class GenreDTO {
-    private int id;
+    private Integer id;
     private String name;
 
     public GenreDTO() {
     }
 
-    public GenreDTO(int id, String name) {
+    public GenreDTO(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

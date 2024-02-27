@@ -1,14 +1,15 @@
-package com.timetobeat.timetobeat.services;
+package com.timetobeat.timetobeat.services.serviceImpls;
 
 import com.timetobeat.timetobeat.models.Game;
 import com.timetobeat.timetobeat.repositories.GamesRepository;
+import com.timetobeat.timetobeat.services.serviceImpls.GameServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
@@ -16,17 +17,16 @@ import java.util.List;
 import java.util.Random;
 
 @ExtendWith(MockitoExtension.class)
-public class GameServiceTest {
-
+public class GameServiceImplTest {
     @Mock
     private GamesRepository gamesRepository;
     @Mock
     private WebClient webClient;
     private List<Game> games;
-    private GameService gameService;
+    private GameServiceImpl gameServiceImpl;
     @BeforeEach
     public void initService() {
-        gameService = new GameService(gamesRepository, webClient);
+        gameServiceImpl = new GameServiceImpl(gamesRepository, webClient);
     }
     @BeforeEach
     public void prepareTestData() {
@@ -44,8 +44,8 @@ public class GameServiceTest {
     }
     @Test
     public void testGetIgdbIds() {
-        String resultString = gameService.getIgdbIds(games);
-
+        String resultString = gameServiceImpl.getIgdbIds(games);
+        System.out.println("Hi wtf");
         Assertions.assertNotNull(resultString);
         Assertions.assertEquals("9999, 123, 1056", resultString);
     }

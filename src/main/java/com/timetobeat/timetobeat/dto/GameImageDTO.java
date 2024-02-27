@@ -1,18 +1,18 @@
 package com.timetobeat.timetobeat.dto;
 
 public class GameImageDTO {
-    private int id;
+    private Integer id;
     private String url;
-    private int game;
+    private Integer game;
     public GameImageDTO() {
 
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -24,11 +24,11 @@ public class GameImageDTO {
         this.url = url;
     }
 
-    public int getGame() {
+    public Integer getGame() {
         return game;
     }
 
-    public void setGame(int game) {
+    public void setGame(Integer game) {
         this.game = game;
     }
 

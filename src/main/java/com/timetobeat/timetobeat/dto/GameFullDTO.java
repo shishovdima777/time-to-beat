@@ -3,7 +3,7 @@ package com.timetobeat.timetobeat.dto;
 import java.util.List;
 
 public class GameFullDTO {
-    private int id;
+    private Integer id;
     private CoverDTO cover;
     private List<GenreDTO> genres;
     private String name;
@@ -12,7 +12,7 @@ public class GameFullDTO {
 
     public GameFullDTO() {
     }
-    public GameFullDTO(int id, CoverDTO cover, List<GenreDTO> genres, String name, List<PlatformDTO> platforms, String summary) {
+    public GameFullDTO(Integer id, CoverDTO cover, List<GenreDTO> genres, String name, List<PlatformDTO> platforms, String summary) {
         this.id = id;
         this.cover = cover;
         this.genres = genres;
@@ -21,11 +21,11 @@ public class GameFullDTO {
         this.summary = summary;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

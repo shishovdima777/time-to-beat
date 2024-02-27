@@ -11,9 +11,9 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_id")
-    private int gameId;
+    private Integer gameId;
     @Column(name = "igdb_id")
-    private int igdbId;
+    private Integer igdbId;
     @Column(name = "game_name")
     private String gameName;
     @Column(name = "avg_main_story_hours")
@@ -35,11 +35,11 @@ public class Game {
 
     }
 
-    public int getIgdbId() {
+    public Integer getIgdbId() {
         return igdbId;
     }
 
-    public void setIgdbId(int igdbId) {
+    public void setIgdbId(Integer igdbId) {
         this.igdbId = igdbId;
     }
 
@@ -47,11 +47,11 @@ public class Game {
         this.gameName = gameName;
     }
 
-    public int getGameId() {
+    public Integer getGameId() {
         return gameId;
     }
 
-    public void setGameId(int gameId) {
+    public void setGameId(Integer gameId) {
         this.gameId = gameId;
     }
 

@@ -4,7 +4,7 @@ package com.timetobeat.timetobeat.controllers;
 import com.timetobeat.timetobeat.dto.GameDTO;
 import com.timetobeat.timetobeat.dto.GameFullDTO;
 import com.timetobeat.timetobeat.models.Game;
-import com.timetobeat.timetobeat.services.GameService;
+import com.timetobeat.timetobeat.services.serviceImpls.GameServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,28 +19,28 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping()
 public class GameController {
-    private final GameService gameService;
+    private final GameServiceImpl gameServiceImpl;
     private final ModelMapper modelMapper;
     @Autowired
-    public GameController(GameService gameService, ModelMapper modelMapper) {
-        this.gameService = gameService;
+    public GameController(GameServiceImpl gameServiceImpl, ModelMapper modelMapper) {
+        this.gameServiceImpl = gameServiceImpl;
         this.modelMapper = modelMapper;
     }
     @GetMapping()
     public Mono<List<GameDTO>> getAllGames() {
-        List<Game> gameList = gameService.findAll();
-        String igdbIds = gameService.getIgdbIds(gameList);
+        List<Game> gameList = gameServiceImpl.findAll();
+        String igdbIds = gameServiceImpl.getIgdbIds(gameList);
         List<GameDTO> gameDTOList = gameList.stream().map(this::convertToGameDto).sorted(Comparator.comparingInt(GameDTO::getIgdbId)).toList();
-        return gameService.setImage(gameDTOList, igdbIds);
+        return gameServiceImpl.setImage(gameDTOList, igdbIds);
     }
     @GetMapping("game/{id}")
     public Mono<GameFullDTO> getGame(@PathVariable int id) {
-        GameDTO gameDTO = convertToGameDto(gameService.getGame(id));
-        return gameService.getGame(gameDTO);
+        GameDTO gameDTO = convertToGameDto(gameServiceImpl.getGame(id));
+        return gameServiceImpl.getGame(gameDTO);
     }
     @PatchMapping ("game/{id}")
     public String updateTime(@PathVariable("id") int id, @RequestBody GameDTO gameDTO){
-        gameService.updateTime(gameService.getGame(id), gameDTO);
+        gameServiceImpl.updateTime(gameServiceImpl.getGame(id), gameDTO);
         return "redirect:/game/{id}";
     }
     private GameDTO convertToGameDto(Game game) {
