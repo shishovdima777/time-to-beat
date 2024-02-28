@@ -1,8 +1,9 @@
 package com.timetobeat.timetobeat.controllers;
 
 
-import com.timetobeat.timetobeat.dto.GameDTO;
-import com.timetobeat.timetobeat.dto.GameFullDTO;
+import com.timetobeat.timetobeat.dto.responses.GameDTO;
+import com.timetobeat.timetobeat.dto.responses.GameFullDTO;
+import com.timetobeat.timetobeat.dto.requests.TimeDTO;
 import com.timetobeat.timetobeat.models.Game;
 import com.timetobeat.timetobeat.services.serviceImpls.GameServiceImpl;
 import org.modelmapper.ModelMapper;
@@ -39,8 +40,8 @@ public class GameController {
         return gameServiceImpl.getGame(gameDTO);
     }
     @PatchMapping ("game/{id}")
-    public String updateTime(@PathVariable("id") int id, @RequestBody GameDTO gameDTO){
-        gameServiceImpl.updateTime(gameServiceImpl.getGame(id), gameDTO);
+    public String updateTime(@PathVariable("id") int id, @RequestBody TimeDTO timeDTO){
+        gameServiceImpl.updateTime(gameServiceImpl.getGame(id), timeDTO);
         return "redirect:/game/{id}";
     }
     private GameDTO convertToGameDto(Game game) {

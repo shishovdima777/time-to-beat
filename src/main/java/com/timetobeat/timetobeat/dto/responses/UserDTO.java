@@ -1,4 +1,4 @@
-package com.timetobeat.timetobeat.dto;
+package com.timetobeat.timetobeat.dto.responses;
 
 import com.timetobeat.timetobeat.models.Game;
 

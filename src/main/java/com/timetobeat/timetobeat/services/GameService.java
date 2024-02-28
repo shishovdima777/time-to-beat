@@ -1,8 +1,9 @@
 package com.timetobeat.timetobeat.services;
 
-import com.timetobeat.timetobeat.dto.GameDTO;
-import com.timetobeat.timetobeat.dto.GameFullDTO;
-import com.timetobeat.timetobeat.dto.GameImageDTO;
+import com.timetobeat.timetobeat.dto.responses.GameDTO;
+import com.timetobeat.timetobeat.dto.responses.GameFullDTO;
+import com.timetobeat.timetobeat.dto.responses.GameImageDTO;
+import com.timetobeat.timetobeat.dto.requests.TimeDTO;
 import com.timetobeat.timetobeat.models.Game;
 import reactor.core.publisher.Mono;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public interface GameService {
     List<Game> findAll();
     Game getGame(int id);
-    void updateTime(Game game, GameDTO gameDTO);
+    void updateTime(Game game, TimeDTO timeDTO);
     void updateMainStoryTime(Game game, List<Integer> time);
     void updateMainStoryExtraTime(Game game, List<Integer> time);
     void updateCompletionistTime(Game game, List<Integer> time);

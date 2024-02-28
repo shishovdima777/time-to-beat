@@ -1,5 +1,6 @@
 package com.timetobeat.timetobeat.services.serviceImpls;
 
+import com.timetobeat.timetobeat.dto.requests.TimeDTO;
 import com.timetobeat.timetobeat.models.Game;
 import com.timetobeat.timetobeat.repositories.GamesRepository;
 import com.timetobeat.timetobeat.services.serviceImpls.GameServiceImpl;
@@ -18,6 +19,10 @@ import java.util.Random;
 
 @ExtendWith(MockitoExtension.class)
 public class GameServiceImplTest {
+    private int currentAvgHours;
+    private int currentAvgMinutes;
+    private int addedHours;
+    private int addMinutes;
     @Mock
     private GamesRepository gamesRepository;
     @Mock
@@ -30,8 +35,12 @@ public class GameServiceImplTest {
     }
     @BeforeEach
     public void prepareTestData() {
+        prepareTestDataForTestGetIgdbIds();
+        prepareTestDataForTestAvgTime();
+    }
+
+    private void prepareTestDataForTestGetIgdbIds() {
         games = new ArrayList<>();
-        Random random = new Random();
         Game game1 = new Game();
         Game game2 = new Game();
         Game game3 = new Game();
@@ -42,11 +51,27 @@ public class GameServiceImplTest {
         games.add(game2);
         games.add(game3);
     }
+
+    private void prepareTestDataForTestAvgTime() {
+        this.currentAvgHours = 75;
+        this.currentAvgMinutes = 30;
+        this.addedHours = 100;
+        this.addMinutes = 10;
+    }
+
     @Test
     public void testGetIgdbIds() {
         String resultString = gameServiceImpl.getIgdbIds(games);
-        System.out.println("Hi wtf");
         Assertions.assertNotNull(resultString);
         Assertions.assertEquals("9999, 123, 1056", resultString);
+    }
+    @Test
+    public void testAvgTime() {
+        List<Integer> list = gameServiceImpl.avgTime(currentAvgHours, currentAvgMinutes, addedHours, addMinutes);
+        Assertions.assertNotNull(list);
+        Assertions.assertInstanceOf(Integer.class, list.get(0));
+        Assertions.assertInstanceOf(Integer.class, list.get(1));
+        Assertions.assertEquals(87, list.get(0));
+        Assertions.assertEquals(50, list.get(1));
     }
 }

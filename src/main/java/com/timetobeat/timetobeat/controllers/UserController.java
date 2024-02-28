@@ -1,6 +1,6 @@
 package com.timetobeat.timetobeat.controllers;
 
-import com.timetobeat.timetobeat.dto.UserDTO;
+import com.timetobeat.timetobeat.dto.responses.UserDTO;
 import com.timetobeat.timetobeat.models.User;
 import com.timetobeat.timetobeat.services.serviceImpls.UserServiceImpl;
 import org.modelmapper.ModelMapper;

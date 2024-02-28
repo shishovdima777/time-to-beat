@@ -1,15 +1,11 @@
-package com.timetobeat.timetobeat.dto;
+package com.timetobeat.timetobeat.dto.responses;
 
-public class CoverDTO {
+public class GameImageDTO {
     private Integer id;
     private String url;
+    private Integer game;
+    public GameImageDTO() {
 
-    public CoverDTO() {
-    }
-
-    public CoverDTO(Integer id, String url) {
-        this.id = id;
-        this.url = url;
     }
 
     public Integer getId() {
@@ -27,4 +23,13 @@ public class CoverDTO {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public Integer getGame() {
+        return game;
+    }
+
+    public void setGame(Integer game) {
+        this.game = game;
+    }
+
 }

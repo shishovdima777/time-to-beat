@@ -1,13 +1,13 @@
-package com.timetobeat.timetobeat.dto;
+package com.timetobeat.timetobeat.dto.responses;
 
-public class GenreDTO {
+public class PlatformDTO {
     private Integer id;
     private String name;
 
-    public GenreDTO() {
+    public PlatformDTO() {
     }
 
-    public GenreDTO(Integer id, String name) {
+    public PlatformDTO(Integer id, String name) {
         this.id = id;
         this.name = name;
     }

@@ -1,7 +1,8 @@
 package com.timetobeat.timetobeat.services.serviceImpls;
-import com.timetobeat.timetobeat.dto.GameDTO;
-import com.timetobeat.timetobeat.dto.GameFullDTO;
-import com.timetobeat.timetobeat.dto.GameImageDTO;
+import com.timetobeat.timetobeat.dto.responses.GameDTO;
+import com.timetobeat.timetobeat.dto.responses.GameFullDTO;
+import com.timetobeat.timetobeat.dto.responses.GameImageDTO;
+import com.timetobeat.timetobeat.dto.requests.TimeDTO;
 import com.timetobeat.timetobeat.models.Game;
 import com.timetobeat.timetobeat.repositories.GamesRepository;
 import com.timetobeat.timetobeat.exceptions.IgdbIdException;
@@ -39,15 +40,15 @@ public class GameServiceImpl implements GameService {
     }
     @Transactional
     @Override
-    public void updateTime(Game game, GameDTO gameDTO) {
+    public void updateTime(Game game, TimeDTO timeDTO) {
         updateMainStoryTime(game, avgTime(game.getAvgMainStoryHours(), game.getAvgMainStoryMinutes(),
-                gameDTO.getAvgMainStoryHours(), gameDTO.getAvgMainStoryMinutes()));
+                timeDTO.getMainStoryHours(), timeDTO.getMainStoryMinutes()));
 
         updateMainStoryExtraTime(game, avgTime(game.getAvgMainPlusDlcHours(), game.getAvgMainPlusDlcMinutes(),
-                gameDTO.getAvgMainPlusDlcHours(), gameDTO.getAvgMainPlusDlcMinutes()));
+                timeDTO.getMainPlusDlcHours(), timeDTO.getMainPlusDlcMinutes()));
 
         updateCompletionistTime(game, avgTime(game.getAvgCompletionistHours(), game.getAvgCompletionistMinutes(),
-                gameDTO.getAvgCompletionistHours(), gameDTO.getAvgCompletionistMinutes()));
+                timeDTO.getCompletionistHours(), timeDTO.getCompletionistMinutes()));
     }
     @Override
     public void updateMainStoryTime(Game game, List<Integer> time) {
@@ -86,7 +87,7 @@ public class GameServiceImpl implements GameService {
     }
     @Override
     public String getIgdbIds(List<Game> games) {
-        StringBuilder igdbIds = new StringBuilder();
+        StringBuffer igdbIds = new StringBuffer();
         for(int i = 0; i < games.size(); i++) {
             if(games.get(i) == games.get(games.size() - 1)) {
                 igdbIds.append(games.get(i).getIgdbId());
