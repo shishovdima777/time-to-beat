@@ -1,16 +1,26 @@
 package com.timetobeat.timetobeat.controllers;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.timetobeat.timetobeat.dto.requests.CredentialsDTO;
+import com.timetobeat.timetobeat.services.serviceImpls.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/auth")
+@RequestMapping()
 public class AuthController {
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login";
+    private final UserServiceImpl userService;
+
+    @Autowired
+    public AuthController(UserServiceImpl userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/auth/login")
+    public String loginPage(@RequestBody CredentialsDTO credentialsDTO) {
+        userService.loadUserByUsername(credentialsDTO.getUsername());
+        System.out.println(credentialsDTO.getUsername());
+        System.out.println(credentialsDTO.getPassword());
+        return "it works";
     }
 }

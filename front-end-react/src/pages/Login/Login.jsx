@@ -1,4 +1,27 @@
+import {useEffect, useState} from "react";
+import axios from "axios";
 const Login = () => {
+    const [data, setData] = useState({});
+
+    useEffect(() => {
+        setData({
+            "username": "dima",
+            "password": "password"
+        });
+    }, []);
+
+
+    const sendData = async () => {
+        try {
+            const request = await axios.post("http://localhost:8080/auth/login", data);
+        } catch (e) {
+            console.log('error sending data ' + e);
+        }
+
+    }
+
+    sendData();
+
     return(
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-md shadow-md w-96">
@@ -31,6 +54,7 @@ const Login = () => {
                     <button
                         type="button"
                         className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none"
+                        onClick={sendData}
                     >
                         Login
                     </button>

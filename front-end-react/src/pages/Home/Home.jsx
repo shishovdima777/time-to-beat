@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import Games from "../../components/Games.jsx";
-import SignUp from "../SignUp/SignUp.jsx";
-import NavBar from "../../components/NavBar.jsx";
+import axios from "axios";
+
 
 
 const Home = () => {
@@ -11,16 +11,12 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:8080');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const result = await response.json();
-                setGames(result);
+                const response = await axios.get('http://localhost:8080');
+                setGames(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
-        }
+        };
         fetchData();
     }, []);
 
