@@ -16,7 +16,7 @@ const NavBar = () => {
 
                 {/* Login and Sign Up Links */}
                 <div className="flex items-center space-x-4">
-                    <a href="/login" className="text-white">Login</a>
+                    <a href="auth/login" className="text-white">Login</a>
                     <a href="/signup" className="text-white">Sign Up</a>
                 </div>
             </div>

@@ -21,6 +21,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UsersRepository usersRepository;
     private final GamesRepository gamesRepository;
     private final UserDetailsImpl userDetails;
+
     @Autowired
     public UserServiceImpl(UsersRepository usersRepository, GamesRepository gamesRepository, UserDetailsImpl userDetails) {
         this.usersRepository = usersRepository;
@@ -28,6 +29,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.userDetails = userDetails;
     }
 
+    @Override
     public User getUser(String username) {
         List<Game> gameList = gamesRepository.findByUsername(username);
         User user = usersRepository.getUserByUsername(username);

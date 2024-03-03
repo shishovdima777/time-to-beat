@@ -19,14 +19,21 @@ public class SecurityConfig {
     public SecurityConfig(UserServiceImpl userService) {
         this.userService = userService;
     }
-
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
      http.
-             authorizeHttpRequests((auth) ->
-                     auth.anyRequest().authenticated()
+             csrf((csrf -> csrf.disable())
+             )
+             .authorizeHttpRequests(auth -> auth
+                     .anyRequest().authenticated()
+             )
+             .formLogin(form -> form
+                     .loginPage("/auth/login")
+                     .loginProcessingUrl("/process_login")
+                     .defaultSuccessUrl("/game/3", true)
+                     .permitAll()
              )
              .httpBasic(Customizer.withDefaults());
-
      return http.build();
  }
     @Bean

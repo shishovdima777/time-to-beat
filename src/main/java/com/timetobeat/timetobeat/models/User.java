@@ -19,6 +19,8 @@ public class User {
     private String password;
     @Column(name = "email")
     private String email;
+    @Column(name = "role")
+    private String role;
     @ManyToMany
     @JoinTable(
             name = "app_user_game",
@@ -29,6 +31,14 @@ public class User {
 
     public User() {
 
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getPassword() {
