@@ -19,7 +19,6 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log(data)
             const response = await axios.post("http://localhost:8080/process_login", data, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
