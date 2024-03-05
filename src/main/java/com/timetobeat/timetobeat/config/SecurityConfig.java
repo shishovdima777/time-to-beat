@@ -26,7 +26,8 @@ public class SecurityConfig {
              csrf((csrf -> csrf.disable())
              )
              .authorizeHttpRequests(auth -> auth
-                     .anyRequest().permitAll()
+                     .anyRequest()
+                     .permitAll()
              )
              .formLogin(form -> form
                      .loginProcessingUrl("/process_login")

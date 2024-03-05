@@ -36,6 +36,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setGames(gameList);
         return usersRepository.getUserByUsername(user.getUsername());
     }
+    @Transactional
+    @Override
+    public void saveUser(User user) {
+        user.setRole("ROLE_USER");
+        usersRepository.save(user);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
