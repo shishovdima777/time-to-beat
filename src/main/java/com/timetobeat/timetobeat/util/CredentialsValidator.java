@@ -34,8 +34,8 @@ public class CredentialsValidator implements Validator {
 
         if(userEntity.isPresent()) {
             errors.rejectValue("email", "", "User with this email already exists");
-            userEntity = usersRepository.findUserByUsername(user.getUsername());
         }
+        userEntity = usersRepository.findUserByUsername(user.getUsername());
 
         if(userEntity.isPresent()) {
             errors.rejectValue("username", "", "User with this username already exists");
