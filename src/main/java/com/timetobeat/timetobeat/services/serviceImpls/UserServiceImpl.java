@@ -21,14 +21,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UsersRepository usersRepository;
     private final GamesRepository gamesRepository;
-    private final UserDetailsImpl userDetails;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UsersRepository usersRepository, GamesRepository gamesRepository, UserDetailsImpl userDetails, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UsersRepository usersRepository, GamesRepository gamesRepository, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
         this.gamesRepository = gamesRepository;
-        this.userDetails = userDetails;
         this.passwordEncoder = passwordEncoder;
     }
 

@@ -1,4 +1,12 @@
+import {useNavigate} from "react-router-dom";
+
 const NavBar = () => {
+
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate('/');
+    }
     return(
         <nav className="bg-black p-4">
             <div className="container mx-auto flex items-center justify-between">
@@ -18,6 +26,7 @@ const NavBar = () => {
                 <div className="flex items-center space-x-4">
                     <a href="auth/login" className="text-white">Login</a>
                     <a href="/signup" className="text-white">Sign Up</a>
+                    <a href="/logout" className="text-white">Log out</a>
                 </div>
             </div>
         </nav>
