@@ -1,4 +1,13 @@
+import {useNavigate} from "react-router-dom";
+
 const NavBar = () => {
+
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        localStorage.setItem('authToken', '');
+        window.location.reload();
+    }
     return(
         <nav className="bg-black p-4">
             <div className="container mx-auto flex items-center justify-between">
@@ -16,8 +25,13 @@ const NavBar = () => {
 
                 {/* Login and Sign Up Links */}
                 <div className="flex items-center space-x-4">
-                    <a href="/login" className="text-white">Login</a>
+                    <a href="/auth/login" className="text-white">Login</a>
                     <a href="/signup" className="text-white">Sign Up</a>
+
+                    { localStorage.getItem('authToken') ? (
+                        <button onClick={handleClick} className="text-white">Log out</button>
+                        ) : null
+                    }
                 </div>
             </div>
         </nav>

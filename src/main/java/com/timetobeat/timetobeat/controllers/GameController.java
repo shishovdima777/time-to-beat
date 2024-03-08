@@ -8,6 +8,8 @@ import com.timetobeat.timetobeat.models.Game;
 import com.timetobeat.timetobeat.services.serviceImpls.GameServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -17,7 +19,6 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping()
 public class GameController {
     private final GameServiceImpl gameServiceImpl;
@@ -32,6 +33,10 @@ public class GameController {
         List<Game> gameList = gameServiceImpl.findAll();
         String igdbIds = gameServiceImpl.getIgdbIds(gameList);
         List<GameDTO> gameDTOList = gameList.stream().map(this::convertToGameDto).sorted(Comparator.comparingInt(GameDTO::getIgdbId)).toList();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getName());
+
         return gameServiceImpl.setImage(gameDTOList, igdbIds);
     }
     @GetMapping("game/{id}")
