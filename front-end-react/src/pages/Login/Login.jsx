@@ -19,11 +19,12 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:8080/process_login", data, {
+            const response = await axios.post("http://localhost:8080/auth/login", data, {
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/json'
                 }
             });
+            localStorage.setItem('authToken', response.data.jwt_token);
             console.log('Authentication successful:', response.data);
             navigate('/')
         } catch (error) {

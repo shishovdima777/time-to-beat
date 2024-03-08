@@ -9,9 +9,14 @@ const Home = () => {
     const [games, setGames] = useState([]);
 
     useEffect(() => {
+        const authToken = localStorage.getItem("authToken");
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080');
+                const response = await axios.get('http://localhost:8080', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
                 setGames(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);

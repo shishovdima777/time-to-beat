@@ -35,7 +35,7 @@ public class GameController {
         List<GameDTO> gameDTOList = gameList.stream().map(this::convertToGameDto).sorted(Comparator.comparingInt(GameDTO::getIgdbId)).toList();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getDetails());
+        System.out.println(authentication.getName());
 
         return gameServiceImpl.setImage(gameDTOList, igdbIds);
     }

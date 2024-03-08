@@ -5,7 +5,8 @@ const NavBar = () => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate('/');
+        localStorage.setItem('authToken', '');
+        window.location.reload();
     }
     return(
         <nav className="bg-black p-4">
@@ -24,9 +25,13 @@ const NavBar = () => {
 
                 {/* Login and Sign Up Links */}
                 <div className="flex items-center space-x-4">
-                    <a href="auth/login" className="text-white">Login</a>
+                    <a href="/auth/login" className="text-white">Login</a>
                     <a href="/signup" className="text-white">Sign Up</a>
-                    <a href="/logout" className="text-white">Log out</a>
+
+                    { localStorage.getItem('authToken') ? (
+                        <button onClick={handleClick} className="text-white">Log out</button>
+                        ) : null
+                    }
                 </div>
             </div>
         </nav>

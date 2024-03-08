@@ -1,18 +1,20 @@
 package com.timetobeat.timetobeat.controllers;
 import com.timetobeat.timetobeat.dto.requests.CredentialsDTO;
+import com.timetobeat.timetobeat.dto.requests.RegistrationDataDTO;
 import com.timetobeat.timetobeat.exceptions.RegistrationNotPerformedException;
 import com.timetobeat.timetobeat.models.User;
 import com.timetobeat.timetobeat.security.JWTAuth;
 import com.timetobeat.timetobeat.services.serviceImpls.UserServiceImpl;
-import com.timetobeat.timetobeat.util.CredentialsValidator;
+import com.timetobeat.timetobeat.util.RegistrationValidator;
 import com.timetobeat.timetobeat.util.RegistrationNotPerformedResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -26,33 +28,38 @@ import java.util.Map;
 public class AuthController {
     private final UserServiceImpl userService;
     private final ModelMapper modelMapper;
-    private final CredentialsValidator credentialsValidator;
+    private final RegistrationValidator registrationValidator;
     private final JWTAuth jwtAuth;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
     public AuthController(UserServiceImpl userService, ModelMapper modelMapper,
-                          CredentialsValidator credentialsValidator, JWTAuth jwtAuth) {
+                          RegistrationValidator registrationValidator, JWTAuth jwtAuth, AuthenticationManager authenticationManager) {
         this.userService = userService;
         this.modelMapper = modelMapper;
-        this.credentialsValidator = credentialsValidator;
+        this.registrationValidator = registrationValidator;
         this.jwtAuth = jwtAuth;
+        this.authenticationManager = authenticationManager;
     }
-    @GetMapping("/showInfo")
-    public String showInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return userDetails.getUsername();
-    }
-    @GetMapping("/login")
-    public ResponseEntity<HttpStatus> login(@RequestBody User user) {
-        //TODO
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping("/login")
+    public Map<String, String> login(@RequestBody CredentialsDTO credentialsDTO) {
+        User user = convertToUser(credentialsDTO);
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String token = jwtAuth.generateToken(user.getUsername());
+
+        return Map.of("jwt_token", token,
+                "User login successfully!", user.getUsername());
     }
 
     @PostMapping("/registration")
-    public Map<String, String> performRegistration(@RequestBody CredentialsDTO credentialsDTO,
+    public Map<String, String> performRegistration(@RequestBody RegistrationDataDTO registrationDataDTO,
                                                     BindingResult bindingResult) {
-        credentialsValidator.validate(credentialsDTO, bindingResult);
+        registrationValidator.validate(registrationDataDTO, bindingResult);
 
         if(bindingResult.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
@@ -64,7 +71,7 @@ public class AuthController {
 
           throw new RegistrationNotPerformedException(errorMap);
         }
-        User user = convertToUser(credentialsDTO);
+        User user = convertToUser(registrationDataDTO);
 
         userService.saveUser(user);
         String token = jwtAuth.generateToken(user.getUsername());
@@ -79,6 +86,10 @@ public class AuthController {
                 System.currentTimeMillis()
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    public User convertToUser(RegistrationDataDTO registrationDataDTO) {
+        return modelMapper.map(registrationDataDTO, User.class);
     }
 
     public User convertToUser(CredentialsDTO credentialsDTO) {
