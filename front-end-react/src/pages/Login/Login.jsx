@@ -24,7 +24,7 @@ const Login = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            localStorage.setItem('authToken', response.data.jwt_token);
+            localStorage.setItem('authToken', response.data.authToken);
             console.log('Authentication successful:', response.data);
             navigate('/')
         } catch (error) {

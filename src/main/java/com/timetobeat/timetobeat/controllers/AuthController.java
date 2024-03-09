@@ -1,6 +1,8 @@
 package com.timetobeat.timetobeat.controllers;
 import com.timetobeat.timetobeat.dto.requests.CredentialsDTO;
 import com.timetobeat.timetobeat.dto.requests.RegistrationDataDTO;
+import com.timetobeat.timetobeat.dto.responses.LoginResponseDTO;
+import com.timetobeat.timetobeat.dto.responses.RegistrationResponseDTO;
 import com.timetobeat.timetobeat.exceptions.RegistrationNotPerformedException;
 import com.timetobeat.timetobeat.models.User;
 import com.timetobeat.timetobeat.security.JWTAuth;
@@ -34,15 +36,17 @@ public class AuthController {
 
     @Autowired
     public AuthController(UserServiceImpl userService, ModelMapper modelMapper,
-                          RegistrationValidator registrationValidator, JWTAuth jwtAuth, AuthenticationManager authenticationManager) {
+                          RegistrationValidator registrationValidator, JWTAuth jwtAuth,
+                          AuthenticationManager authenticationManager) {
         this.userService = userService;
         this.modelMapper = modelMapper;
         this.registrationValidator = registrationValidator;
         this.jwtAuth = jwtAuth;
         this.authenticationManager = authenticationManager;
     }
+
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody CredentialsDTO credentialsDTO) {
+    public LoginResponseDTO login(@RequestBody CredentialsDTO credentialsDTO) {
         User user = convertToUser(credentialsDTO);
 
         Authentication authentication = authenticationManager.authenticate(
@@ -52,13 +56,12 @@ public class AuthController {
 
         String token = jwtAuth.generateToken(user.getUsername());
 
-        return Map.of("jwt_token", token,
-                "User login successfully!", user.getUsername());
+        return new LoginResponseDTO(token, "User successfully logged in", user.getUsername());
     }
 
     @PostMapping("/registration")
-    public Map<String, String> performRegistration(@RequestBody RegistrationDataDTO registrationDataDTO,
-                                                    BindingResult bindingResult) {
+    public RegistrationResponseDTO performRegistration(@RequestBody RegistrationDataDTO registrationDataDTO,
+                                                       BindingResult bindingResult) {
         registrationValidator.validate(registrationDataDTO, bindingResult);
 
         if(bindingResult.hasErrors()) {
@@ -76,7 +79,7 @@ public class AuthController {
         userService.saveUser(user);
         String token = jwtAuth.generateToken(user.getUsername());
 
-        return Map.of("jwt_token", token);
+        return new RegistrationResponseDTO(token);
     }
 
     @ExceptionHandler
@@ -88,11 +91,11 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    public User convertToUser(RegistrationDataDTO registrationDataDTO) {
+    private User convertToUser(RegistrationDataDTO registrationDataDTO) {
         return modelMapper.map(registrationDataDTO, User.class);
     }
 
-    public User convertToUser(CredentialsDTO credentialsDTO) {
+    private User convertToUser(CredentialsDTO credentialsDTO) {
         return modelMapper.map(credentialsDTO, User.class);
     }
 }

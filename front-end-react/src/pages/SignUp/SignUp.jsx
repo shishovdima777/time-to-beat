@@ -27,8 +27,8 @@ const SignUp = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            localStorage.setItem("authToken", response.data.jwt_token);
-            console.log('Registration was successful:', response.data.jwt_token);
+            localStorage.setItem("authToken", response.data.authToken);
+            console.log('Registration was successful:', response.data.authToken);
             navigate('/');
         } catch (e) {
             console.log('Registration was failed ' + e);

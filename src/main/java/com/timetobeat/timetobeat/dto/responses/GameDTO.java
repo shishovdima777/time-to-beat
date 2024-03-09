@@ -1,5 +1,4 @@
 package com.timetobeat.timetobeat.dto.responses;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class GameDTO {
     private Integer gameId;
