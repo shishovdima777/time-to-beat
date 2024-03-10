@@ -7,6 +7,7 @@ import com.timetobeat.timetobeat.models.Game;
 import com.timetobeat.timetobeat.repositories.GamesRepository;
 import com.timetobeat.timetobeat.exceptions.IgdbIdException;
 import com.timetobeat.timetobeat.services.GameService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
@@ -24,11 +25,13 @@ import java.util.List;
 public class GameServiceImpl implements GameService {
     private final GamesRepository gamesRepository;
     private final WebClient webClient;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public GameServiceImpl(GamesRepository gamesRepository, WebClient webClient) {
+    public GameServiceImpl(GamesRepository gamesRepository, WebClient webClient, ModelMapper modelMapper) {
         this.gamesRepository = gamesRepository;
         this.webClient = webClient;
+        this.modelMapper = modelMapper;
     }
     @Override
     public List<Game> findAll() {
@@ -38,6 +41,19 @@ public class GameServiceImpl implements GameService {
     public Game getGame(int id) {
         return gamesRepository.getGameByGameId(id);
     }
+
+    public List<GameDTO> retrieveGames() {
+        List<Game> listOfGames = findAll();
+        String strOfIgdbIds = getIgdbIds(listOfGames);
+
+        List<GameDTO> dtoList = listOfGames.stream()
+                .map(this::convertToGameDto)
+                .sorted(Comparator.comparingInt(GameDTO::getIgdbId))
+                .toList();
+
+        return setImage(dtoList, strOfIgdbIds);
+    }
+
     @Transactional
     @Override
     public void updateTime(Game game, TimeDTO timeDTO) {
@@ -117,7 +133,7 @@ public class GameServiceImpl implements GameService {
         return list1;
     }
     @Override
-    public Mono<List<GameImageDTO>> getGamesImages(String igdbIds) {
+    public List<GameImageDTO> getGamesImages(String igdbIds) {
         String bodyValue = "f url, game;\n" +
                 "w game = (" + igdbIds + ");";
 
@@ -126,23 +142,19 @@ public class GameServiceImpl implements GameService {
                 .uri("covers/").accept(MediaType.APPLICATION_JSON)
                 .bodyValue(bodyValue)
                 .retrieve()
-              .bodyToMono(new ParameterizedTypeReference<List<GameImageDTO>>() {});
+                .bodyToFlux(GameImageDTO.class)
+                .collectList()
+                .block();
     }
     @Override
-    public Mono<List<GameDTO>> setImage(List<GameDTO> gameDTOList, String igdbIds) {
-        Mono<List<GameImageDTO>> gamesImages = getGamesImages(igdbIds);
+    public List<GameDTO> setImage(List<GameDTO> gameDTOList, String igdbIds) {
+        List<GameImageDTO> gamesImages = getGamesImages(igdbIds);
 
-        return gamesImages.flatMap(gameImageDTOS -> {
-            try {
-                List<GameImageDTO> sortedList = gameImageDTOS.stream()
-                        .sorted(Comparator.comparingInt(GameImageDTO::getGame))
-                        .toList();
+        List<GameImageDTO> sortedList = gamesImages.stream()
+                .sorted(Comparator.comparingInt(GameImageDTO::getGame))
+                .toList();
 
-                return Mono.just(tieUrls(gameDTOList, sortedList));
-            } catch (IgdbIdException e) {
-                return Mono.error(e);
-            }
-        });
+        return tieUrls(gameDTOList, sortedList);
     }
     @Override
     public Mono<GameFullDTO> getGame(GameDTO gameDTO) {
@@ -158,5 +170,9 @@ public class GameServiceImpl implements GameService {
 
         return fullGame.map(gameFullDTOS -> gameFullDTOS.get(0));
 
+    }
+
+    private GameDTO convertToGameDto(Game game) {
+        return modelMapper.map(game, GameDTO.class);
     }
 }

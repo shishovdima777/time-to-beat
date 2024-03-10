@@ -19,7 +19,7 @@ public interface GameService {
     List<Integer> avgTime(int currentAvgHours, int currentAvgMinutes, int inputHours, int inputMinutes);
     String getIgdbIds(List<Game> games);
     List<GameDTO> tieUrls(List<GameDTO> list1, List<GameImageDTO> list2);
-    Mono<List<GameImageDTO>> getGamesImages(String igdbIds);
-    Mono<List<GameDTO>> setImage(List<GameDTO> gameDTOList, String igdbIds);
+    List<GameImageDTO> getGamesImages(String igdbIds);
+    List<GameDTO> setImage(List<GameDTO> gameDTOList, String igdbIds);
     Mono<GameFullDTO> getGame(GameDTO gameDTO);
 }

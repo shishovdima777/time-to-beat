@@ -1,21 +1,18 @@
 package com.timetobeat.timetobeat.services.serviceImpls;
 
-import com.timetobeat.timetobeat.dto.requests.TimeDTO;
 import com.timetobeat.timetobeat.models.Game;
 import com.timetobeat.timetobeat.repositories.GamesRepository;
-import com.timetobeat.timetobeat.services.serviceImpls.GameServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @ExtendWith(MockitoExtension.class)
 public class GameServiceImplTest {
@@ -29,9 +26,11 @@ public class GameServiceImplTest {
     private WebClient webClient;
     private List<Game> games;
     private GameServiceImpl gameServiceImpl;
+    @Mock
+    private ModelMapper modelMapper;
     @BeforeEach
     public void initService() {
-        gameServiceImpl = new GameServiceImpl(gamesRepository, webClient);
+        gameServiceImpl = new GameServiceImpl(gamesRepository, webClient, modelMapper);
     }
     @BeforeEach
     public void prepareTestData() {

@@ -28,16 +28,10 @@ public class GameController {
         this.gameServiceImpl = gameServiceImpl;
         this.modelMapper = modelMapper;
     }
+
     @GetMapping()
-    public Mono<List<GameDTO>> getAllGames() {
-        List<Game> gameList = gameServiceImpl.findAll();
-        String igdbIds = gameServiceImpl.getIgdbIds(gameList);
-        List<GameDTO> gameDTOList = gameList.stream().map(this::convertToGameDto).sorted(Comparator.comparingInt(GameDTO::getIgdbId)).toList();
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getName());
-
-        return gameServiceImpl.setImage(gameDTOList, igdbIds);
+    public List<GameDTO> getAllGames() {
+        return gameServiceImpl.retrieveGames();
     }
     @GetMapping("game/{id}")
     public Mono<GameFullDTO> getGame(@PathVariable int id) {
