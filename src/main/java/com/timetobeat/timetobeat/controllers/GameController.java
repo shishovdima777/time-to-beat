@@ -8,6 +8,8 @@ import com.timetobeat.timetobeat.models.Game;
 import com.timetobeat.timetobeat.services.serviceImpls.GameServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -22,28 +24,26 @@ import java.util.List;
 @RequestMapping()
 public class GameController {
     private final GameServiceImpl gameServiceImpl;
-    private final ModelMapper modelMapper;
+
     @Autowired
-    public GameController(GameServiceImpl gameServiceImpl, ModelMapper modelMapper) {
+    public GameController(GameServiceImpl gameServiceImpl) {
         this.gameServiceImpl = gameServiceImpl;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping()
     public List<GameDTO> getAllGames() {
         return gameServiceImpl.retrieveGames();
     }
+
     @GetMapping("game/{id}")
-    public Mono<GameFullDTO> getGame(@PathVariable int id) {
-        GameDTO gameDTO = convertToGameDto(gameServiceImpl.getGame(id));
-        return gameServiceImpl.getGame(gameDTO);
+    public GameFullDTO getGame(@PathVariable int id) {
+        return gameServiceImpl.getGame(gameServiceImpl.getGame(id));
     }
+
     @PatchMapping ("game/{id}")
-    public String updateTime(@PathVariable("id") int id, @RequestBody TimeDTO timeDTO){
+    public ResponseEntity<HttpStatus> updateTime(@PathVariable("id") int id,
+                                                 @RequestBody TimeDTO timeDTO){
         gameServiceImpl.updateTime(gameServiceImpl.getGame(id), timeDTO);
-        return "redirect:/game/{id}";
-    }
-    private GameDTO convertToGameDto(Game game) {
-        return modelMapper.map(game, GameDTO.class);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

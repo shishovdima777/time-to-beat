@@ -21,5 +21,5 @@ public interface GameService {
     List<GameDTO> tieUrls(List<GameDTO> list1, List<GameImageDTO> list2);
     List<GameImageDTO> getGamesImages(String igdbIds);
     List<GameDTO> setImage(List<GameDTO> gameDTOList, String igdbIds);
-    Mono<GameFullDTO> getGame(GameDTO gameDTO);
+    GameFullDTO getGame(Game game);
 }

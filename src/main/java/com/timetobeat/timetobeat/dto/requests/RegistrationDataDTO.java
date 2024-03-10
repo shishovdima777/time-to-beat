@@ -1,9 +1,24 @@
 package com.timetobeat.timetobeat.dto.requests;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class RegistrationDataDTO {
+    @NotEmpty(message = "Username shouldn't be empty")
+    @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username should contain only Latin letters, numbers,-,_")
+    @Size(min = 4, message = "Minimum username length is 4 characters")
+    @Size(max = 100, message = "Maximum username length is 100 characters")
     private String username;
+    @NotEmpty(message = "email shouldn't be empty")
+    @Size(max = 255, message = "Maximum email length is 100 characters")
+    @Pattern(regexp = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", message = "Not valid email")
     private String email;
+    @NotEmpty(message = "This field should not be empty")
+    @Size(min = 6, message = "Password must be at least 6 symbols")
     private String password;
+    @NotEmpty(message = "This field should not be empty")
+    @Size(min = 6, message = "Password must be at least 6 symbols")
     private String confirmationPassword;
 
     public RegistrationDataDTO() {

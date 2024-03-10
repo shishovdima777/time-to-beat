@@ -3,6 +3,7 @@ import com.timetobeat.timetobeat.dto.responses.GameDTO;
 import com.timetobeat.timetobeat.dto.responses.GameFullDTO;
 import com.timetobeat.timetobeat.dto.responses.GameImageDTO;
 import com.timetobeat.timetobeat.dto.requests.TimeDTO;
+import com.timetobeat.timetobeat.exceptions.UserNotExistsException;
 import com.timetobeat.timetobeat.models.Game;
 import com.timetobeat.timetobeat.repositories.GamesRepository;
 import com.timetobeat.timetobeat.exceptions.IgdbIdException;
@@ -19,6 +20,7 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional(readOnly = true)
@@ -157,19 +159,20 @@ public class GameServiceImpl implements GameService {
         return tieUrls(gameDTOList, sortedList);
     }
     @Override
-    public Mono<GameFullDTO> getGame(GameDTO gameDTO) {
+    public GameFullDTO getGame(Game game) {
         String bodyValue = "f name, summary, cover.url, platforms.name, genres.name;\n" +
-                "w id = " + gameDTO.getIgdbId() + ";";
+                "w id = " + game.getIgdbId() + ";";
 
-        Mono<List<GameFullDTO>> fullGame = webClient
+        List<GameFullDTO> fullGame = webClient
                 .post()
                 .uri("games/")
                 .bodyValue(bodyValue)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<GameFullDTO>>() {});
+                .bodyToMono(new ParameterizedTypeReference<List<GameFullDTO>>() {})
+                .block();
 
-        return fullGame.map(gameFullDTOS -> gameFullDTOS.get(0));
-
+        assert fullGame != null;
+        return fullGame.get(0);
     }
 
     private GameDTO convertToGameDto(Game game) {
