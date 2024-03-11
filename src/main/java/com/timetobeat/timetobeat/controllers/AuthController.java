@@ -9,6 +9,7 @@ import com.timetobeat.timetobeat.security.JWTAuth;
 import com.timetobeat.timetobeat.services.serviceImpls.UserServiceImpl;
 import com.timetobeat.timetobeat.util.RegistrationValidator;
 import com.timetobeat.timetobeat.util.RegistrationNotPerformedResponse;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,7 +61,7 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public RegistrationResponseDTO performRegistration(@RequestBody RegistrationDataDTO registrationDataDTO,
+    public RegistrationResponseDTO performRegistration(@RequestBody @Valid RegistrationDataDTO registrationDataDTO,
                                                        BindingResult bindingResult) {
         registrationValidator.validate(registrationDataDTO, bindingResult);
 
@@ -80,15 +81,6 @@ public class AuthController {
         String token = jwtAuth.generateToken(user.getUsername());
 
         return new RegistrationResponseDTO(token);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<RegistrationNotPerformedResponse> handleException(RegistrationNotPerformedException e) {
-        RegistrationNotPerformedResponse response = new RegistrationNotPerformedResponse(
-                e.getErrorMap(),
-                System.currentTimeMillis()
-        );
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     private User convertToUser(RegistrationDataDTO registrationDataDTO) {

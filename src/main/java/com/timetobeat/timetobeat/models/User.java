@@ -1,6 +1,7 @@
 package com.timetobeat.timetobeat.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -17,7 +18,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
     @NotEmpty(message = "Username shouldn't be empty")
-    @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username should contain only Latin letters, numbers,-,_")
+    @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Username should contain only Latin letters and symbols")
     @Size(min = 4, message = "Minimum username length is 4 characters")
     @Size(max = 100, message = "Maximum username length is 100 characters")
     @Column(name = "username")
@@ -26,9 +27,10 @@ public class User {
     @Size(min = 6, message = "Password must be at least 6 symbols")
     @Column(name = "password")
     private String password;
-    @NotEmpty(message = "email shouldn't be empty")
+
     @Size(max = 255, message = "Maximum email length is 100 characters")
-    @Pattern(regexp = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", message = "Not valid email")
+    @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+    @NotEmpty(message = "Email cannot be empty")
     @Column(name = "email")
     private String email;
     @Column(name = "role")

@@ -2,6 +2,11 @@ package com.timetobeat.timetobeat.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.NumberFormat;
 
 import java.util.List;
 
@@ -12,20 +17,40 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_id")
     private Integer gameId;
+    @NotNull
     @Column(name = "igdb_id")
     private Integer igdbId;
+    @NotEmpty
     @Column(name = "game_name")
     private String gameName;
+    @NotNull
+    @Min(value = 0, message = "minimum value 0")
+    @Max(value = 400, message = "maximum value 400")
     @Column(name = "avg_main_story_hours")
     private Integer avgMainStoryHours;
+    @NotNull
+    @Min(value = 0, message = "minimum value 0")
+    @Max(value = 400, message = "maximum value 400")
     @Column(name = "avg_main_story_minutes")
     private Integer avgMainStoryMinutes;
+    @NotNull
+    @Min(value = 0, message = "minimum value 0")
+    @Max(value = 400, message = "maximum value 400")
     @Column(name = "avg_completionist_hours")
     private Integer avgCompletionistHours;
+    @NotNull
+    @Min(value = 0, message = "minimum value 0")
+    @Max(value = 400, message = "maximum value 400")
     @Column(name = "avg_completionist_minutes")
     private Integer avgCompletionistMinutes;
+    @NotNull
+    @Min(value = 0, message = "minimum value 0")
+    @Max(value = 400, message = "maximum value 400")
     @Column(name = "avg_main_plus_dlc_hours")
     private Integer avgMainPlusDlcHours;
+    @NotNull
+    @Min(value = 0, message = "minimum value 0")
+    @Max(value = 400, message = "maximum value 400")
     @Column(name = "avg_main_plus_dlc_minutes")
     private Integer avgMainPlusDlcMinutes;
     @ManyToMany(mappedBy = "games")
