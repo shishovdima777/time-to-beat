@@ -1,8 +1,10 @@
 package com.timetobeat.timetobeat.controllers.advice;
 
 import com.timetobeat.timetobeat.exceptions.RegistrationNotPerformedException;
+import com.timetobeat.timetobeat.exceptions.UserNotExistsException;
 import com.timetobeat.timetobeat.util.ErrorMessageResponse;
 import com.timetobeat.timetobeat.util.RegistrationNotPerformedResponse;
+import com.timetobeat.timetobeat.util.UserNotExistsResponse;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -28,6 +30,14 @@ public class ExceptionApiHandler {
                 e.getErrorMap(),
                 System.currentTimeMillis()
         );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotExistsException.class)
+    public ResponseEntity<UserNotExistsResponse> handleUserNotExistsException(UserNotExistsException e) {
+        UserNotExistsResponse response = new UserNotExistsResponse(e.getMessage(),
+                System.currentTimeMillis());
+
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

@@ -40,11 +40,4 @@ public class UserController {
         return modelMapper.map(user, UserDTO.class);
     }
 
-    @ExceptionHandler(UserNotExistsException.class)
-    public ResponseEntity<UserNotExistsResponse> handleUserNotExistsException(UserNotExistsException e) {
-        UserNotExistsResponse response = new UserNotExistsResponse(e.getMessage(),
-                System.currentTimeMillis());
-
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
 }
