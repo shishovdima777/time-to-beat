@@ -1,23 +1,16 @@
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [data, setData] = useState({
-        username: '',
-        password: ''
-    });
+    const { register,
+        handleSubmit,
+        formState: { errors } } = useForm();
+
     const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setData({
-            ...data,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const onSubmit = async (data) => {
+        console.log(data);
         try {
             const response = await axios.post("http://localhost:8080/auth/login", data, {
                 headers: {
@@ -36,7 +29,7 @@ const Login = () => {
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-md shadow-md w-96">
                 <h2 className="text-2xl font-bold mb-6">Login</h2>
-                <form onSubmit={handleSubmit} action="/process_login">
+                <form onSubmit={handleSubmit(onSubmit)} action="/process_login">
                     <div className="mb-4">
                         <label htmlFor="username" className="block text-sm font-medium text-gray-600">
                             Username
@@ -44,12 +37,25 @@ const Login = () => {
                         <input
                             type="text"
                             id="username"
-                            name="username"
-                            value={data.username}
-                            onChange={handleChange}
+                            {...register('username', {
+                                required: "Username is required",
+                                minLength: {
+                                    value: 4,
+                                    message: "Username must have at least 4 characters "
+                                },
+                                maxLength: {
+                                    value: 200,
+                                    message: "Username can't have more than 200 characters "
+                                },
+                                pattern: {
+                                    value: /^[a-zA-Z0-9_-]+$/,
+                                    message: "Username can only contain letters, numbers, underscores, and hyphens"
+                                }
+                            })}
                             className="mt-1 p-2 w-full rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
                             placeholder="Enter your username"
                         />
+                        {errors.username && <p className="text-red-500 text-xs italic">This field is required {errors.username.message}</p>}
                     </div>
                     <div className="mb-4">
                         <label htmlFor="password" className="block text-sm font-medium text-gray-600">
@@ -58,12 +64,17 @@ const Login = () => {
                         <input
                             type="password"
                             id="password"
-                            name="password"
-                            value={data.password}
-                            onChange={handleChange}
+                            {...register('password', {
+                                required: true,
+                                minLength: {
+                                    value: 6,
+                                    message: "Password must be at least 6 symbols"
+                                }
+                            })}
                             className="mt-1 p-2 w-full rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
                             placeholder="Enter your password"
                         />
+                        {errors.password && <p className="text-red-500 text-xs italic">This field is required {errors.password.message}</p>}
                     </div>
                     <div className="mb-6 flex items-center space-x-4">
                         <button
