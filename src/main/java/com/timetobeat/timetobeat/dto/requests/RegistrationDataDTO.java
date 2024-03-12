@@ -12,7 +12,7 @@ public class RegistrationDataDTO {
     @Size(max = 100, message = "Maximum username length is 100 characters")
     private String username;
 
-    @Size(max = 255, message = "Maximum email length is 100 characters")
+    @Size(max = 255, message = "Maximum email length is 255 characters")
     @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     @NotEmpty(message = "Email cannot be empty")
     private String email;

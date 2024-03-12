@@ -1,26 +1,31 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {useForm} from "react-hook-form";
 
 
 const SignUp = () => {
     const navigate = useNavigate();
-    const [data, setData] = useState({
-        email: '',
-        username: '',
-        password: '',
-        confirmationPassword: ''
-    });
+    const {register,
+        handleSubmit,
+        watch,
+        formState: {errors}} = useForm();
+    // const [data, setData] = useState({
+    //     email: '',
+    //     username: '',
+    //     password: '',
+    //     confirmationPassword: ''
+    // });
 
-    const handleChange = (e) => {
-        setData({
-            ...data,
-            [e.target.name]: e.target.value
-        });
-    };
+    // const handleChange = (e) => {
+    //     setData({
+    //         ...data,
+    //         [e.target.name]: e.target.value
+    //     });
+    // };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const onSubmit = async (data) => {
+        // e.preventDefault()
         try {
             const response = await axios.post("http://localhost:8080/auth/registration", data, {
                 headers: {
@@ -36,7 +41,7 @@ const SignUp = () => {
     }
     return(
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
             <div className="bg-white p-8 rounded-md shadow-md w-96">
                 <h2 className="text-2xl font-bold mb-6">Signup</h2>
                 <div className="mb-4">
@@ -46,12 +51,21 @@ const SignUp = () => {
                     <input
                         type="email"
                         id="email"
-                        name="email"
-                        value={data.email}
-                        onChange={handleChange}
+                        {...register('email', {
+                            required: "Email is required",
+                        maxLength: {
+                            value: 255,
+                            message: "Maximum email length is 255 characters"
+                        },
+                        pattern: {
+                            value: /^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$/,
+                            message: "Email is not valid"
+                        }
+                        })}
                         className="mt-1 p-2 w-full rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
                         placeholder="Enter your email"
                     />
+                    {errors.email && <p className="text-red-500 text-xs italic">{errors.email.message}</p>}
                 </div>
                 <div className="mb-4">
                     <label htmlFor="username" className="block text-sm font-medium text-gray-600">
@@ -60,12 +74,25 @@ const SignUp = () => {
                     <input
                         type="text"
                         id="username"
-                        name="username"
-                        value={data.username}
-                        onChange={handleChange}
+                        {...register('username', {
+                            required: 'Username shouldn\'t be empty',
+                            minLength: {
+                                value: 4,
+                                message: "Username must have at least 4 characters "
+                            },
+                            maxLength: {
+                                value: 100,
+                                message: "Username can't have more than 100 characters "
+                            },
+                            pattern: {
+                                value: /^[a-zA-Z0-9_-]+$/,
+                                message: "Username can only contain latin letters, numbers, underscores, and hyphens"
+                            }
+                        })}
                         className="mt-1 p-2 w-full rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
                         placeholder="Choose a username"
                     />
+                    {errors.username && <p className="text-red-500 text-xs italic">{errors.username.message}</p>}
                 </div>
                 <div className="mb-4">
                     <label htmlFor="password" className="block text-sm font-medium text-gray-600">
@@ -74,12 +101,17 @@ const SignUp = () => {
                     <input
                         type="password"
                         id="password"
-                        name="password"
-                        value={data.password}
-                        onChange={handleChange}
+                        {...register('password', {
+                            required: 'This field is required',
+                            minLength: {
+                                value: 6,
+                                message: "Password must be at least 6 symbols"
+                            }
+                        })}
                         className="mt-1 p-2 w-full rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
                         placeholder="Enter your password"
                     />
+                    {errors.password && <p className="text-red-500 text-xs italic">{errors.password.message}</p>}
                 </div>
                 <div className="mb-4 text-sm text-gray-500">
                     Password will be encrypted.
@@ -91,12 +123,19 @@ const SignUp = () => {
                     <input
                         type="password"
                         id="confirmationPassword"
-                        name="confirmationPassword"
-                        value={data.confirmationPassword}
-                        onChange={handleChange}
+                        {...register('confirmationPassword', {
+                            required: 'This field is required',
+                            validate: (value) => {
+                                if (watch('password') !== value) {
+                                    return 'Passwords do no match';
+                                }
+                            }
+
+                        })}
                         className="mt-1 p-2 w-full rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
                         placeholder="Verify your password"
                     />
+                    {errors.confirmationPassword && <p className="text-red-500 text-xs italic">{errors.confirmationPassword.message}</p>}
                 </div>
                 <div className="flex items-center space-x-4">
                     <button

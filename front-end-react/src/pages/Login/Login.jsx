@@ -44,8 +44,8 @@ const Login = () => {
                                     message: "Username must have at least 4 characters "
                                 },
                                 maxLength: {
-                                    value: 200,
-                                    message: "Username can't have more than 200 characters "
+                                    value: 100,
+                                    message: "Username can't have more than 100 characters "
                                 },
                                 pattern: {
                                     value: /^[a-zA-Z0-9_-]+$/,
@@ -55,7 +55,7 @@ const Login = () => {
                             className="mt-1 p-2 w-full rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
                             placeholder="Enter your username"
                         />
-                        {errors.username && <p className="text-red-500 text-xs italic">This field is required {errors.username.message}</p>}
+                        {errors.username && <p className="text-red-500 text-xs italic">{errors.username.message}</p>}
                     </div>
                     <div className="mb-4">
                         <label htmlFor="password" className="block text-sm font-medium text-gray-600">
@@ -65,7 +65,7 @@ const Login = () => {
                             type="password"
                             id="password"
                             {...register('password', {
-                                required: true,
+                                required: 'This field is required',
                                 minLength: {
                                     value: 6,
                                     message: "Password must be at least 6 symbols"
@@ -74,7 +74,7 @@ const Login = () => {
                             className="mt-1 p-2 w-full rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
                             placeholder="Enter your password"
                         />
-                        {errors.password && <p className="text-red-500 text-xs italic">This field is required {errors.password.message}</p>}
+                        {errors.password && <p className="text-red-500 text-xs italic">{errors.password.message}</p>}
                     </div>
                     <div className="mb-6 flex items-center space-x-4">
                         <button
