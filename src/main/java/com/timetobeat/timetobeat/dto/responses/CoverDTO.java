@@ -1,23 +1,13 @@
 package com.timetobeat.timetobeat.dto.responses;
 
 public class CoverDTO {
-    private Integer id;
     private String url;
 
     public CoverDTO() {
     }
 
-    public CoverDTO(Integer id, String url) {
-        this.id = id;
+    public CoverDTO(String url) {
         this.url = url;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getUrl() {

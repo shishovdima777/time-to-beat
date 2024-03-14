@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 
 @RestController
-@RequestMapping()
+@RequestMapping("/game")
 public class GameController {
     private final GameServiceImpl gameServiceImpl;
 
@@ -34,13 +35,17 @@ public class GameController {
     public List<GameDTO> getAllGames() {
         return gameServiceImpl.retrieveGames();
     }
+    @GetMapping("/findByName")
+    public List<Game> getByName(@RequestParam String name) {
+        return gameServiceImpl.findAllByName(name);
+    }
 
-    @GetMapping("game/{id}")
+    @GetMapping("/{id}")
     public GameFullDTO getGame(@PathVariable int id) {
         return gameServiceImpl.getGame(gameServiceImpl.getGame(id));
     }
 
-    @PatchMapping ("game/{id}")
+    @PatchMapping ("/{id}")
     public ResponseEntity<HttpStatus> updateTime(@PathVariable("id") int id,
                                                  @RequestBody TimeDTO timeDTO){
         gameServiceImpl.updateTime(gameServiceImpl.getGame(id), timeDTO);

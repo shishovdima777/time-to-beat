@@ -44,6 +44,11 @@ public class GameServiceImpl implements GameService {
         return gamesRepository.getGameByGameId(id);
     }
 
+    @Override
+    public List<Game> findAllByName(String name) {
+        return gamesRepository.findByGameNameIgnoreCaseStartingWith(name);
+    }
+
     public List<GameDTO> retrieveGames() {
         List<Game> listOfGames = findAll();
         String strOfIgdbIds = getIgdbIds(listOfGames);
@@ -128,8 +133,8 @@ public class GameServiceImpl implements GameService {
                 list1.get(pointer1).setUrl(list2.get(pointer2).getUrl());
                 pointer1++;
                 pointer2++;
-            } else {
-                throw new IgdbIdException("Game ID's in the lists do not match");
+            } else if(list1.size() != list2.size()) {
+                throw new IgdbIdException("Lists have different sizes");
             }
         }
         return list1;

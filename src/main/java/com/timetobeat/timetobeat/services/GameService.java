@@ -12,6 +12,7 @@ import java.util.List;
 public interface GameService {
     List<Game> findAll();
     Game getGame(int id);
+    List<Game> findAllByName(String name);
     void updateTime(Game game, TimeDTO timeDTO);
     void updateMainStoryTime(Game game, List<Integer> time);
     void updateMainStoryExtraTime(Game game, List<Integer> time);

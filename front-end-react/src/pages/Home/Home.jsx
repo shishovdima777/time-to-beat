@@ -3,7 +3,6 @@ import Games from "../../components/Games.jsx";
 import axios from "axios";
 
 
-
 const Home = () => {
 
     const [games, setGames] = useState([]);

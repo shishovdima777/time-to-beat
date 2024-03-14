@@ -15,4 +15,5 @@ public interface GamesRepository extends ListCrudRepository<Game, Integer> {
     @Query("select g from Game g join g.userList b where b.username = :username")
     List<Game> findByUsername(@Param("username") String username);
     Game getGameByGameId(int id);
+    List<Game> findByGameNameIgnoreCaseStartingWith(String string);
 }
